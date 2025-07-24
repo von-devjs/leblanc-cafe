@@ -1,0 +1,1046 @@
+<!-- By Von Jared Castillo 
+     Bachelor of Science in Computer Engineering - Major in System and Network Administration
+     Pangasinan State University - Urdaneta City Campus (Year Graduated - 2025) 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leblanc Cafe</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+
+    <script>
+      tailwind.config = {     
+        theme: {
+          extend: {
+            colors: { primary: "#3C1321", secondary: "#8B4513" },     // DEFAULT COLORS FOR THIS PROJECT
+            borderRadius: {     // BORDER RADIUS DEFAULT px
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"/>
+
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #FFFDD0;
+        color: #2C1810;
+        overflow-x: hidden;
+      }
+
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media (max-width: 640px) {
+      .product-card {
+        min-width: calc(100vw - 3rem);
+      }
+
+      .category-btn {
+        padding: 0.4rem 1rem;
+        font-size: 0.875rem;
+        margin-left: -2px;
+      }
+
+      }
+      @media (max-width: 768px) {
+      .bubble {
+        display: none;
+      }
+
+      }
+      .heading-font {
+        font-family: 'Cookie', cursive;
+      }
+
+      .logo-font {
+        font-family: 'Pacifico', serif;
+      }
+
+      .nav-link {
+        position: relative;
+      }
+
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: #8B4513;
+        transition: width 0.3s;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .product-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(140, 70, 20, 0.1);
+      }
+
+      .product-image {
+        transition: transform 0.5s;
+      }
+
+      .product-card:hover .product-image {
+        transform: scale(1.05);
+      }
+
+      .cookie-button {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cookie-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+      }
+
+      .cookie-button:hover::before {
+        left: 100%;
+      }
+
+      .custom-range {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 8px;
+        border-radius: 5px;
+        background: #FFF5E1;
+        outline: none;
+      }
+
+      .custom-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #8B4513;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .custom-range::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+      }
+
+      .custom-checkbox {
+        display: none;
+      }
+
+      .checkbox-label {
+        position: relative;
+        padding-left: 30px;
+        cursor: pointer;
+        display: inline-block;
+        line-height: 20px;
+      }
+
+      .checkbox-label::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #8B4513;
+        border-radius: 4px;
+        background: #FFF5E1;
+        transition: all 0.3s;
+      }
+
+      .custom-checkbox:checked + .checkbox-label::before {
+        background: #8B4513;
+      }
+
+      .custom-checkbox:checked + .checkbox-label::after {
+        content: '';
+        position: absolute;
+        left: 7px;
+        top: 3px;
+        width: 6px;
+        height: 12px;
+        border: solid #FFF5E1;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+
+      .bubble {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: float 4s linear infinite;
+      }
+
+      @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+      }
+
+      }
+      .product-slider {
+        scroll-behavior: smooth;
+      }
+
+      .contact-input {
+        background: #FFF5E1;
+        border: 2px solid #8B4513;
+        transition: all 0.3s;
+      }
+
+      .contact-input:focus {
+        border-color: #3C1321;
+        box-shadow: 0 0 0 3px rgba(140, 70, 20, 0.2);
+      }
+
+      /* Hide default arrows for number inputs */
+      input[type=number]::-webkit-inner-spin-button,
+      input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      input[type=number] {
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full bg-white bg-opacity-95 shadow-md z-50 px-4 py-3">
+      <div class="max-w-3xl mx-auto flex justify-between items-center">
+        <div class="flex items-center">
+          <span class="logo-font text-2xl sm:text-3xl text-primary mr-2">Leblanc</span>
+          <span class="text-xs sm:text-sm font-medium text-secondary">Cafe</span>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#home" class="nav-link text-secondary hover:text-primary font-medium transition-colors">Home</a>
+          <a href="#products" class="nav-link text-secondary hover:text-primary font-medium transition-colors">Products</a>
+          <a href="#about" class="nav-link text-secondary hover:text-primary font-medium transition-colors">About Us</a>
+          <a href="#" class="nav-link text-secondary hover:text-primary font-medium transition-colors">Login</a>
+          <a href="#contact" class="cookie-button bg-primary text-white px-5 py-2 !rounded-button whitespace-nowrap shadow-md hover:bg-opacity-90 transition-all">Contact Us</a>
+        </div>
+
+        <div
+          class="md:hidden w-10 h-10 flex items-center justify-center" id="mobile-menu-button">
+          <i class="ri-menu-line text-secondary text-2xl"></i>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div class="md:hidden hidden bg-white absolute w-full left-0 top-full shadow-md" id="mobile-menu">
+        <div class="flex flex-col p-4 space-y-3">
+          <a href="#home" class="text-secondary hover:text-primary font-medium py-2">Home</a>
+          <a href="#products" class="text-secondary hover:text-primary font-medium py-2">Products</a>
+          <a href="#about" class="text-secondary hover:text-primary font-medium py-2">About Us</a>
+          <a href="#" class="text-secondary hover:text-primary font-medium py-2">Login</a>
+          <a href="#contact" class="cookie-button bg-primary text-white px-5 py-2 !rounded-button whitespace-nowrap shadow-md hover:bg-opacity-90 transition-all text-center mt-2">Contact Us</a>
+        </div>
+      </div>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-16 sm:pt-20 overflow-hidden"
+      style="background-image: url('images/bg.jpg'); background-size: cover; background-position: center;">
+      <div class="absolute inset-0 bg-primary bg-opacity-50"></div>
+      <div class="relative max-w-7xl mx-auto px-4 py-16 sm:py-24 md:py-32 flex flex-col md:flex-row items-center">
+        <div class="w-full md:w-1/2 text-center md:text-left mb-12 md:mb-0">
+
+          <h1 class="heading-font text-4xl sm:text-5xl md:text-7xl text-white mb-4 sm:mb-6">
+            Indulge in Cookie Cream Perfection
+          </h1>
+
+          <p
+            class="text-white text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-lg">
+            Experience the perfect blend of cookies and cream in our signature
+            milk teas and frappes. Handcrafted with love since 2018.
+          </p>
+
+          <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
+            <a href="#products" class="cookie-button bg-white text-primary px-8 py-3 !rounded-button whitespace-nowrap shadow-lg font-semibold hover:bg-opacity-90 transition-all">
+              View Menu</a>
+            <a href="#contact" class="cookie-button bg-secondary text-white px-8 py-3 !rounded-button whitespace-nowrap shadow-lg font-semibold hover:bg-opacity-90 transition-all">
+              Find Us</a>
+          </div>
+
+        </div>
+        <div class="w-full md:w-1/2 flex justify-center">
+          <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-8 border-white shadow-2xl transform rotate-3">
+            <img src="images/dp.jpg" alt="Cookies and Cream Milk Tea" class="w-full h-full object-cover"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+
+          <h2 class="heading-font text-5xl text-primary mb-4">Our Delicious Menu</h2>
+
+          <p class="text-secondary max-w-2xl mx-auto">
+            Discover our signature cookies and cream inspired beverages,
+            handcrafted with premium ingredients for the perfect indulgence.
+          </p>
+
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="flex justify-center mb-12  left-2 right-27 px--20">
+          <div class="w-full max-w-full overflow-x-auto pb-2 px-1 sm:px-0 hide-scrollbar">
+            <div class="inline-flex bg-[#FFF5E1] p-1 !rounded-full min-w-max mx-auto">
+
+              <button class="category-btn active px-4 sm:px-6 py-2 !rounded-full whitespace-nowrap text-sm sm:text-base text-white bg-secondary" data-category="all">
+                All
+              </button>
+
+              <button class="category-btn px-4 sm:px-6 py-2 !rounded-full whitespace-nowrap text-sm sm:text-base text-secondary" data-category="frappe">
+                Frappe
+              </button>
+
+              <button class="category-btn px-4 sm:px-6 py-2 !rounded-full whitespace-nowrap text-sm sm:text-base text-secondary" data-category="milk-tea">
+                Milk Tea
+              </button>
+
+              <button class="category-btn px-4 sm:px-6 py-2 !rounded-full whitespace-nowrap text-sm sm:text-base text-secondary" data-category="fruit-smoothie">
+                Smoothie
+              </button>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Slider -->
+        <div class="relative">
+          <div class="overflow-hidden">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+
+              <!-- Frappe Products -->
+              <div class="product-card bg-white shadow-lg !rounded-lg overflow-hidden" data-category="frappe">
+                <div class="h-48 overflow-hidden">
+                  <img src="images/Cookies & Cream Frappe.jpg" alt="Cookies & Cream Frappe" class="product-image w-full h-full object-cover object-top"/>
+                </div>
+                <div class="p-5">
+                  <div class="flex justify-between items-center mb-3">
+
+                    <h3 class="text-xl font-semibold text-primary">
+                      Cookies & Cream Frappe
+                    </h3>
+
+                    <span class="bg-secondary text-white px-3 py-1 !rounded-full text-sm font-medium">P150</span>
+                  </div>
+
+                  <p class="text-secondary text-sm">
+                    Our signature blend with premium cookies and fresh cream.
+                  </p>
+
+                </div>
+              </div>
+
+              <div class="product-card min-w-[240px] sm:min-w-[280px] bg-white shadow-lg !rounded-lg overflow-hidden" data-category="frappe">
+                <div class="h-48 overflow-hidden">
+                  <img src="images/Chocolate Cookie Frappe.jpg" class="product-image w-full h-full object-cover object-top"/>
+                </div>
+                <div class="p-5">
+                  <div class="flex justify-between items-center mb-3">
+
+                    <h3 class="text-xl font-semibold text-primary">
+                      Chocolate Cookie Frappe
+                    </h3>
+
+                    <span
+                      class="bg-secondary text-white px-3 py-1 !rounded-full text-sm font-medium">P150</span>
+                  </div>
+
+                  <p class="text-secondary text-sm">
+                    Rich chocolate blended with cookie crumbles and cream.
+                  </p>
+
+                </div>
+              </div>
+
+              <!-- Milk Tea Products -->
+              <div class="product-card min-w-[280px] bg-white shadow-lg !rounded-lg overflow-hidden" data-category="milk-tea">
+                <div class="h-48 overflow-hidden">
+                  <img src="images/Classic Cookie Milk Tea.jpg" alt="Classic Cookie Milk Tea" class="product-image w-full h-full object-cover object-top"/>
+                </div>
+                <div class="p-5">
+                  <div class="flex justify-between items-center mb-3">
+
+                    <h3 class="text-xl font-semibold text-primary">
+                      Classic Cookie Milk Tea
+                    </h3>
+
+                    <span class="bg-secondary text-white px-3 py-1 !rounded-full text-sm font-medium">P100</span>
+                  </div>
+
+                  <p class="text-secondary text-sm">
+                    Premium black tea with cookie infused milk and pearls.
+                  </p>
+
+                </div>
+              </div>
+
+              <div class="product-card min-w-[280px] bg-white shadow-lg !rounded-lg overflow-hidden" data-category="milk-tea">
+                <div class="h-48 overflow-hidden">
+                  <img src="images/Brown Sugar Cookie Milk Tea.jpg" alt="Brown Sugar Cookie Milk Tea" class="product-image w-full h-full object-cover object-top"/>
+                </div>
+                <div class="p-5">
+                  <div class="flex justify-between items-center mb-3">
+
+                    <h3 class="text-xl font-semibold text-primary">
+                      Brown Sugar Cookie Milk Tea
+                    </h3>
+
+                    <span class="bg-secondary text-white px-3 py-1 !rounded-full text-sm font-medium">P100</span>
+                  </div>
+
+                  <p class="text-secondary text-sm">
+                    Creamy milk tea with brown sugar syrup and cookie bits.
+                  </p>
+
+                </div>
+              </div>
+
+              <!-- Fruit Smoothie Products -->
+              <div class="product-card min-w-[280px] bg-white shadow-lg !rounded-lg overflow-hidden" data-category="fruit-smoothie">
+                <div class="h-48 overflow-hidden">
+                  <img src="images/Strawberry Cookie Smoothie.jpg" alt="Strawberry Cookie Smoothie" class="product-image w-full h-full object-cover object-top"/>
+                </div>
+                <div class="p-5">
+                  <div class="flex justify-between items-center mb-3">
+
+                    <h3 class="text-xl font-semibold text-primary">
+                      Strawberry Cookie Smoothie
+                    </h3>
+
+                    <span class="bg-secondary text-white px-3 py-1 !rounded-full text-sm font-medium">P90</span>
+                  </div>
+
+                  <p class="text-secondary text-sm">
+                    Fresh strawberries blended with vanilla cookies and cream.
+                  </p>
+
+                </div>
+              </div>
+              <div class="product-card min-w-[280px] bg-white shadow-lg !rounded-lg overflow-hidden" data-category="fruit-smoothie">
+                <div class="h-48 overflow-hidden">
+                  <img src="images/Banana Cookie Smoothie.jpg" alt="Banana Cookie Smoothie" class="product-image w-full h-full object-cover object-top"/>
+                </div>
+                <div class="p-5">
+                  <div class="flex justify-between items-center mb-3">
+
+                    <h3 class="text-xl font-semibold text-primary">
+                      Banana Cookie Smoothie
+                    </h3>
+
+                    <span class="bg-secondary text-white px-3 py-1 !rounded-full text-sm font-medium">P90</span>
+                  </div>
+
+                  <p class="text-secondary text-sm">
+                    Ripe bananas blended with chocolate cookies and cream.
+                  </p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Customization Section -->
+        <div class="mt-20 bg-[#FFF5E1] !rounded-xl p-6 md:p-10 shadow-lg">
+          <h3 class="heading-font text-3xl text-primary mb-6 text-center">Customize Your Drink</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+
+            <!-- Ice Level -->
+            <div class="bg-white !rounded-lg p-6 shadow-md">
+              <h4 class="text-xl font-semibold text-primary mb-4 flex items-center">
+                <div class="w-8 h-8 bg-[#E0F2FE] !rounded-full flex items-center justify-center mr-2">
+                  <i class="ri-ice-cream-line text-secondary"></i>
+                </div>
+                Ice Level
+              </h4>
+
+              <div class="mb-4">
+                <input type="range" min="0" max="100" value="70" step="10" class="custom-range" id="ice-level"/>
+              </div>
+
+              <div class="flex justify-between text-sm text-secondary">
+                <span>No Ice</span>
+                <span id="ice-value">70%</span>
+                <span>Extra Ice</span>
+              </div>
+            </div>
+
+            <!-- Sugar Level -->
+            <div class="bg-white !rounded-lg p-6 shadow-md">
+              <h4 class="text-xl font-semibold text-primary mb-4 flex items-center">
+                <div class="w-8 h-8 bg-[#FEF3C7] !rounded-full flex items-center justify-center mr-2">
+                  <i class="ri-drop-line text-secondary"></i>
+                </div>
+                Sugar Level
+              </h4>
+
+              <div class="mb-4">
+                <input type="range" min="0" max="100" value="50" step="10"
+                  class="custom-range" id="sugar-level"/>
+              </div>
+
+              <div class="flex justify-between text-sm text-secondary">
+                <span>No Sugar</span>
+                <span id="sugar-value">50%</span>
+                <span>Extra Sweet</span>
+              </div>
+            </div>
+
+            <!-- Toppings -->
+            <div class="bg-white !rounded-lg p-6 shadow-md">
+              <h4 class="text-xl font-semibold text-primary mb-4 flex items-center">
+                <div class="w-8 h-8 bg-[#FEE2E2] !rounded-full flex items-center justify-center mr-2">
+                  <i class="ri-cake-line text-secondary"></i>
+                </div>
+                Toppings
+              </h4>
+
+              <div class="space-y-3">
+                <div>
+                  <input type="checkbox" id="topping-1" class="custom-checkbox"/>
+                  <label for="topping-1" class="checkbox-label text-secondary">Cookie Crumbs (+P25)</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" id="topping-2" class="custom-checkbox"/>
+                  <label for="topping-2" class="checkbox-label text-secondary">Boba Pearls (+P25)</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" id="topping-3" class="custom-checkbox"/>
+                  <label for="topping-3" class="checkbox-label text-secondary">Cream Cheese (+P25)</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" id="topping-4" class="custom-checkbox"/>
+                  <label for="topping-4" class="checkbox-label text-secondary">Whipped Cream (+P25)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <!-- About Us Section -->
+    <section
+      id="about" class="py-20 relative overflow-hidden" style="background-image: url('images/about\ bg.jpg'); background-size: cover;">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="heading-font text-5xl text-primary mb-4">Our Story</h2>
+
+          <p class="text-secondary max-w-2xl mx-auto">
+            From a small cookie-inspired milk tea stand to your favorite dessert
+            beverage destination.
+          </p>
+
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div class="bg-white !rounded-xl p-8 shadow-lg">
+
+            <h3 class="text-2xl font-semibold text-primary mb-4">
+              The Leblanc Cafe Journey
+            </h3>
+
+            <p class="text-secondary mb-4">
+              Founded in 2023, Leblanc began with a simple vision: to create the
+              perfect cookies and cream milk tea experience. Our founder, Emily
+              Chen, combined her passion for baking and love for milk tea to
+              create our signature recipes.
+            </p>
+
+            <p class="text-secondary mb-4">
+              What started as a small kiosk has grown into multiple locations
+              across the city, but our commitment to quality and flavor remains
+              unchanged. Every drink is handcrafted with premium ingredients and
+              made fresh to order.
+            </p>
+
+            <p class="text-secondary">
+              We take pride in sourcing the finest tea leaves, using real
+              cookies in our recipes, and creating each drink with care and
+              attention to detail. Our mission is to bring joy through every sip
+              of our delicious creations.
+            </p>
+
+          </div>
+          <div class="grid grid-cols-2 gap-6">
+            <div class="transform rotate-2">
+              <img src="images/about1.jpg" alt="Our Shop" class="w-full h-full object-cover !rounded-lg shadow-lg"/>
+            </div>
+
+            <div class="transform -rotate-2 mt-10">
+              <img src="images/about2.jpg" alt="Our Team" class="w-full h-full object-cover !rounded-lg shadow-lg"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 sm:mt-16 md:mt-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 text-center">
+          <div class="bg-white !rounded-xl p-8 shadow-lg">
+            <div class="w-16 h-16 bg-[#FEF3C7] !rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="ri-leaf-line text-secondary text-2xl"></i>
+            </div>
+
+            <h3 class="text-xl font-semibold text-primary mb-3">
+              Premium Ingredients
+            </h3>
+
+            <p class="text-secondary">
+              We use only the finest tea leaves, fresh milk, and real cookies in
+              all our beverages.
+            </p>
+
+          </div>
+
+          <div class="bg-white !rounded-xl p-8 shadow-lg">
+            <div class="w-16 h-16 bg-[#E0F2FE] !rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="ri-cup-line text-secondary text-2xl"></i>
+            </div>
+
+            <h3 class="text-xl font-semibold text-primary mb-3">
+              Handcrafted With Love
+            </h3>
+
+            <p class="text-secondary">
+              Every drink is made to order by our skilled baristas with
+              attention to detail.
+            </p>
+
+          </div>
+          <div class="bg-white !rounded-xl p-8 shadow-lg">
+            <div class="w-16 h-16 bg-[#FEE2E2] !rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="ri-recycle-line text-secondary text-2xl"></i>
+            </div>
+
+            <h3 class="text-xl font-semibold text-primary mb-3">
+              Eco-Friendly Packaging
+            </h3>
+
+            <p class="text-secondary">
+              We're committed to sustainability with biodegradable cups and
+              paper straws.
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="heading-font text-5xl text-primary mb-4">Get In Touch</h2>
+
+          <p class="text-secondary max-w-2xl mx-auto">
+            Have questions or feedback? We'd love to hear from you. Contact us
+            or visit one of our locations.
+          </p>
+
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
+          <div>
+            <div class="bg-[#FFF5E1] !rounded-xl p-8 shadow-lg mb-8">
+              <h3 class="text-2xl font-semibold text-primary mb-6">Send Us a Message</h3>
+
+              <form>
+                <div class="mb-4">
+                  <label for="name" class="block text-secondary mb-2">Your Name</label>
+                  <input type="text" id="name" class="contact-input w-full p-3 !rounded-lg border-none focus:outline-none" placeholder="Enter your name"/>
+                </div>
+
+                <div class="mb-4">
+                  <label for="email" class="block text-secondary mb-2">Email Address</label>
+                  <input type="email" id="email" class="contact-input w-full p-3 !rounded-lg border-none focus:outline-none" placeholder="Enter your email"/>
+                </div>
+
+                <div class="mb-4">
+                  <label for="subject" class="block text-secondary mb-2">Subject</label>
+                  <input type="text" id="subject" class="contact-input w-full p-3 !rounded-lg border-none focus:outline-none" placeholder="Enter subject"/>
+                </div>
+
+                <div class="mb-6">
+                  <label for="message" class="block text-secondary mb-2">Message</label>
+                  <textarea id="message" rows="4" class="contact-input w-full p-3 !rounded-lg border-none focus:outline-none resize-none" placeholder="Enter your message"></textarea>
+                </div>
+
+                <button type="submit" class="cookie-button bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap shadow-md hover:bg-opacity-90 transition-all w-full">
+                  Send Message
+                </button>
+
+              </form>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-white !rounded-lg p-6 shadow-md border border-[#FFF5E1]">
+                <div class="w-12 h-12 bg-[#FEF3C7] !rounded-full flex items-center justify-center mb-4">
+                  <i class="ri-phone-line text-secondary text-xl"></i>
+                </div>
+                <h4 class="text-lg font-semibold text-primary mb-2">Call Us</h4>
+                <p class="text-secondary">+63 945-206-2243</p>
+              </div>
+
+              <div class="bg-white !rounded-lg p-6 shadow-md border border-[#FFF5E1]">
+                <div class="w-12 h-12 bg-[#E0F2FE] !rounded-full flex items-center justify-center mb-4">
+                  <i class="ri-mail-line text-secondary text-xl"></i>
+                </div>
+                <h4 class="text-lg font-semibold text-primary mb-2">Email Us</h4>
+                <p class="text-secondary">leblanc@gmail.com</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="bg-white !rounded-xl overflow-hidden shadow-lg h-full">
+              <div class="h-64 relative">
+                <img src="images/sample loc.png" alt="Map" class="w-full h-full object-cover"/>
+                <div class="absolute inset-0 bg-primary bg-opacity-20 flex items-center justify-center">
+                  <div class="bg-white !rounded-lg p-4 shadow-lg">
+                    <h4 class="text-primary font-semibold">Leblanc Flagship Store</h4>
+                    <p class="text-secondary text-sm">Rosales, Pangasinan</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-6">
+                <h3 class="text-2xl font-semibold text-primary mb-4">Visit Our Locations</h3>
+                <div class="space-y-6">
+                  <div class="flex border-b border-[#FFF5E1] pb-4">
+                    <div class="w-10 h-10 bg-[#FEF3C7] !rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                      <i class="ri-store-2-line text-secondary"></i>
+                    </div>
+                    <div>
+                      <h4 class="text-lg font-semibold text-primary">Downtown</h4>
+                      <p class="text-secondary mb-1">Rosales, Pangasinan</p>
+                      <p class="text-secondary text-sm">Open Daily: 8AM - 5PM</p>
+                    </div>
+                  </div>
+                  <div class="flex border-b border-[#FFF5E1] pb-4">
+                    <div class="w-10 h-10 bg-[#E0F2FE] !rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                      <i class="ri-store-2-line text-secondary"></i>
+                    </div>
+                    <div>
+                      <h4 class="text-lg font-semibold text-primary">Westside Mall</h4>
+                      <p class="text-secondary mb-1">456 Vanilla Road, Cream City</p>
+                      <p class="text-secondary text-sm">Open Daily: 10AM - 9PM</p>
+                    </div>
+                  </div>
+                  <div class="flex">
+                    <div class="w-10 h-10 bg-[#FEE2E2] !rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                      <i class="ri-store-2-line text-secondary"></i>
+                    </div>
+                    <div>
+                      <h4 class="text-lg font-semibold text-primary">University Campus</h4>
+                      <p class="text-secondary mb-1">789 Chocolate Ave, Cream City</p>
+                      <p class="text-secondary text-sm">Open Mon-Fri: 7AM - 8PM</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-6 flex space-x-4">
+                  <a href="#" class="w-10 h-10 bg-[#FFF5E1] !rounded-full flex items-center justify-center text-secondary hover:bg-secondary hover:text-white transition-colors">
+                    <i class="ri-facebook-fill"></i>
+                  </a>
+
+                  <a href="#" class="w-10 h-10 bg-[#FFF5E1] !rounded-full flex items-center justify-center text-secondary hover:bg-secondary hover:text-white transition-colors">
+                    <i class="ri-instagram-line"></i>
+                  </a>
+
+                  <a href="#" class="w-10 h-10 bg-[#FFF5E1] !rounded-full flex items-center justify-center text-secondary hover:bg-secondary hover:text-white transition-colors">
+                    <i class="ri-tiktok-line"></i>
+                  </a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          <div>
+            <div class="flex items-center mb-4">
+              <span class="logo-font text-3xl text-white mr-2">Leblanc</span>
+            </div>
+
+            <p class="text-white text-opacity-80 mb-6">
+              Indulge in the perfect blend of cookies and cream in our signature
+              milk teas and frappes.
+            </p>
+
+            <div class="flex space-x-4">
+              <a href="#" class="w-10 h-10 border border-white border-opacity-20 !rounded-full flex items-center justify-center text-white hover:bg-white hover:bg-opacity-10 transition-colors">
+                <i class="ri-facebook-fill"></i>
+              </a>
+
+              <a href="#" class="w-10 h-10 border border-white border-opacity-20 !rounded-full flex items-center justify-center text-white hover:bg-white hover:bg-opacity-10 transition-colors">
+                <i class="ri-instagram-line"></i>
+              </a>
+
+              <a href="#" class="w-10 h-10 border border-white border-opacity-20 !rounded-full flex items-center justify-center text-white hover:bg-white hover:bg-opacity-10 transition-colors">
+                <i class="ri-tiktok-line"></i>
+              </a>
+
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="#home" class="text-white text-opacity-80 hover:text-opacity-100 transition-opacity">Home</a>
+              </li>
+
+              <li>
+                <a href="#products" class="text-white text-opacity-80 hover:text-opacity-100 transition-opacity">Products</a>
+              </li>
+
+              <li>
+                <a href="#about" class="text-white text-opacity-80 hover:text-opacity-100 transition-opacity">About Us</a>
+              </li>
+
+              <li>
+                <a href="#contact" class="text-white text-opacity-80 hover:text-opacity-100 transition-opacity">Contact</a>
+              </li>
+
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Information</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-white text-opacity-80 hover:text-opacity-100 transition-opacity">Privacy Policy</a>
+              </li>
+
+              <li>
+                <a href="#" class="text-white text-opacity-80 hover:text-opacity-100 transition-opacity">Terms & Conditions</a>
+              </li>
+             
+              <li>
+                <a href="#" class="text-white text-opacity-80 hover:text-opacity-100 transition-opacity">Allergen Information</a>
+              </li>
+
+              <li>
+                <a href="#" class="text-white text-opacity-80 hover:text-opacity-100 transition-opacity">FAQ</a>
+              </li>
+
+            </ul>
+          </div>
+         
+          </div>
+        </div>
+        <div class="border-t border-white border-opacity-10 mt-10 pt-6 text-center">
+          <p class="text-white text-opacity-60">© 2025 Leblanc Cafe. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    
+    <!-- Bubbles Container -->
+    <div
+      id="bubbles-container"
+      class="fixed inset-0 pointer-events-none z-10 overflow-hidden"
+    ></div>
+
+    <!-- Mobile Menu Script -->
+    <script id="mobile-menu-script">
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+        mobileMenuButton.addEventListener("click", function () {
+          mobileMenu.classList.toggle("hidden");
+        });
+        // Close mobile menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll("a");
+        mobileLinks.forEach((link) => {
+          link.addEventListener("click", function () {
+            mobileMenu.classList.add("hidden");
+          });
+        });
+      });
+    </script>
+
+    <!-- Product Slider Script -->
+    <script id="category-filter-script">
+      document.addEventListener("DOMContentLoaded", function () {
+        const cards = document.querySelectorAll(".product-card");
+        const categoryBtns = document.querySelectorAll(".category-btn");
+        categoryBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            // Remove active class from all buttons
+            categoryBtns.forEach((b) => {
+              b.classList.remove("active", "bg-secondary", "text-white");
+              b.classList.add("text-secondary");
+            });
+            // Add active class to clicked button
+            this.classList.add("active", "bg-secondary", "text-white");
+            this.classList.remove("text-secondary");
+            const category = this.getAttribute("data-category");
+            // Show all cards if category is 'all'
+            if (category === "all") {
+              cards.forEach((card) => {
+                card.style.display = "block";
+              });
+            } else {
+              // Show only cards with matching category
+              cards.forEach((card) => {
+                if (card.getAttribute("data-category") === category) {
+                  card.style.display = "block";
+                } else {
+                  card.style.display = "none";
+                }
+              });
+            }
+          });
+        });
+      });
+    </script>
+
+    <!-- Customization Script -->
+    <script id="customization-script">
+      document.addEventListener("DOMContentLoaded", function () {
+        const iceLevel = document.getElementById("ice-level");
+        const iceValue = document.getElementById("ice-value");
+        const sugarLevel = document.getElementById("sugar-level");
+        const sugarValue = document.getElementById("sugar-value");
+        iceLevel.addEventListener("input", function () {
+          iceValue.textContent = `${this.value}%`;
+        });
+        sugarLevel.addEventListener("input", function () {
+          sugarValue.textContent = `${this.value}%`;
+        });
+      });
+    </script>
+
+    <!-- Bubble Animation Script -->
+    <script id="bubble-animation-script">
+      document.addEventListener("DOMContentLoaded", function () {
+        const bubblesContainer = document.getElementById("bubbles-container");
+        function createBubble() {
+          const bubble = document.createElement("div");
+          bubble.classList.add("bubble");
+          // Random size between 10px and 50px
+          const size = Math.random() * 40 + 10;
+          bubble.style.width = `${size}px`;
+          bubble.style.height = `${size}px`;
+          // Random position from left
+          const positionX = Math.random() * window.innerWidth;
+          bubble.style.left = `${positionX}px`;
+          // Start from bottom
+          bubble.style.bottom = "-100px";
+          // Random animation duration
+          const animationDuration = Math.random() * 6 + 4;
+          bubble.style.animationDuration = `${animationDuration}s`;
+          // Random delay
+          const delay = Math.random() * 5;
+          bubble.style.animationDelay = `${delay}s`;
+          // Add bubble to container
+          bubblesContainer.appendChild(bubble);
+          // Remove bubble after animation completes
+          setTimeout(
+            () => {
+              bubble.remove();
+            },
+            (animationDuration + delay) * 1000,
+          );
+        }
+        // Create initial bubbles
+        for (let i = 0; i < 20; i++) {
+          createBubble();
+        }
+        // Create new bubbles periodically
+        setInterval(createBubble, 1000);
+      });
+    </script>
+
+    <!-- Sound Effect Script -->
+    <script id="sound-effect-script">
+      document.addEventListener("DOMContentLoaded", function () {
+        // Create audio element
+        const bubbleSound = new Audio();
+        bubbleSound.src ="sound/tea-92800.mp3"; // Empty sound as placeholder
+        bubbleSound.volume = 1.0;
+        // Play sound on button hover
+        const buttons = document.querySelectorAll(".cookie-button");
+        buttons.forEach((button) => {
+          button.addEventListener("mouseenter", function () {
+            // Clone the audio to allow multiple sounds at once
+            const sound = bubbleSound.cloneNode();
+            sound.play().catch((e) => {
+              // Autoplay might be blocked, ignore error
+            });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
